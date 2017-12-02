@@ -1,13 +1,5 @@
 "use strict"
 
-// Setting global metaData on the client object. Each error report will
-// merge this object with any other metaData it receives via other means
-bugsnagClient.metaData = {
-  company: {
-    name: "Themyscira",
-    transport: "invisible jet"
-  }
-}
 
 document.addEventListener ("DOMContentLoaded", function() 
     {
@@ -17,11 +9,18 @@ document.addEventListener ("DOMContentLoaded", function()
         $('#jsTypeError').on('click', fJsType);
 
 
-    } // closes anon function
-); // closes DOM event listener
-console.log("connected!!!!!!!");
+    } 
+); 
+console.log("snag(bug);");
 
-
+// Setting global metaData on the client object. Each error report will
+// merge this object with any other metaData it receives via other means
+bugsnagClient.metaData = {
+  company: {
+    name: "Themyscira",
+    transport: "invisible jet"
+  }
+}
 
 
 function notifyException() {
@@ -36,7 +35,12 @@ function notifyException() {
   }
 }
 
-notifyException();
+// notifyException();
+
+// below syntax is like a 'log' to bugsnag.  
+// It does not even require an error object, just a string name & message.
+// Additional data is optional.
+
 
 bugsnagClient.notify({
   name: "ErrorName", 
@@ -47,35 +51,15 @@ bugsnagClient.notify({
 
 
 
-bugsnagClient.notify(new Error('Koala!'), {
-  beforeSend: (report) => {
-    report.updateMetaData('pants', {
-      request_id: 12345,
-      message_id: 854
-    })
-  }
-})
+// bugsnagClient.notify(new Error('Koala!'), {
+//   beforeSend: (report) => {    
+//     report.updateMetaData('pants', {
+//       request_id: 12345,
+//       message_id: 854
+//     })
+//   }
+// })
 
-// captures the data user has selected on the page,
-// to hand over to AJAX calls
-function fGetUserData() {
-    var user = $('#username').val();
-    var rstage = $('#rstage option:selected').val();
-    var handling = $('#handling input:checked').val();
-    // if user field is blank:
-    if (user.trim() === "") {
-        user = "Voltron, Defender of the Universe"
-    }
-
-    var user_info = {
-        "user": user,
-        "rstage": rstage,
-        "handling": handling
-    };
-
-    console.log(user_info);
-    return user_info;
-}
 
 
 // *************************************
@@ -92,7 +76,7 @@ function fJsRange(evt) {
             num.toPrecision(500);
         } 
         catch (e) {
-            Bugsnag.notifyException(e, "a handled Range Error - ta da!!");            
+            bugsnagClient.notify(e, "a handled Range Error - ta da!!");            
         }
     }
 
@@ -140,4 +124,27 @@ function fJsType(evt) {
     }
 }
 
+
+// captures the data user has selected on the page,
+// to hand over to AJAX calls. A "mock" of user/session 
+// info you can add to any error.
+
+function fGetUserData() {
+    var user = $('#username').val();
+    var rstage = $('#rstage option:selected').val();
+    var handling = $('#handling input:checked').val();
+    // if user field is blank:
+    if (user.trim() === "") {
+        user = "Voltron, Defender of the Universe"
+    }
+
+    var user_info = {
+        "user": user,
+        "rstage": rstage,
+        "handling": handling
+    };
+
+    console.log(user_info);
+    return user_info;
+}
 
