@@ -22,6 +22,25 @@ bugsnagClient.metaData = {
   }
 }
 
+// beforeSend is a powerfool tool.  It will fire before EVERY error is sent, 
+// whether handled or unhandled.  Here you can remove private data, 
+// add custom datapoints, and even stop the report entirely.
+bugsnagClient.beforeSend = function (report) {
+  var user_info = fGetUserData();
+  var rstage = user_info["rstage"];
+
+  if (rstage === "staging") {
+    // to stop all staging errors from being reported, you have 2 options:
+      report.ignore();
+      // ignore is a new method that will stop the report, 
+      // or you can just return false from the beforeSend.
+      }
+    // read the docs for all the many attributes you can modify here.
+  report.app.releaseStage = rstage;
+  report.user.name = user_info["user"];
+
+}
+
 
 function notifyException() {
   try {
