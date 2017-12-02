@@ -1,26 +1,57 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Bugsnag JS: Plain JS example</title>
+    <title>Bugsnag JS v4: Javascript/jQuery/Ajax example</title>
     <script src="//d2wy8f7a9ursnm.cloudfront.net/v4.0.0-14/bugsnag.js"></script>
     <script>window.bugsnagClient = bugsnag({
         apiKey: '8b1f5fc2a44d5f6cdbaff524d74c33b1',
-        appVersion: '1.2.3',
+        appVersion: '1.2.7',
         releaseStage: 'staging',
         notifyReleaseStages: [ 'staging', 'production' ],
         // metaData: { /* some metaData to attach to every report */ },
-        user: { id: '123', name: 'B. Nag', email: 'bugs.nag@bugsnag.com' },
+        user: { id: '007', name: 'Diana Prince', email: 'ww@amazons.com' },
         // beforeSend: function (report) { /* amend or ignore the report */ }
     })
     </script>
   </head>
   <body>
-    <h1>Bugsnag JS: Plain JS example</h1>
+    <h1>Bugsnag JS v4: Javascript/jQuery/Ajax example</h1>
     <p>
       This page is a basic example of how to include bugsnag-js on a page via a
       <code>&lt;script&gt;</code> tag.
     </p>
+
+
+
+  <p>Username
+      <input type="text" name="user" id="username"><br>
+          Can you handle it?
+  <div id="handling">
+    <input type="radio" name="handling" value="no" checked>No
+    <input type="radio" name="handling" value="yes">Yes<br>
+  </p>
+  </div>
+  <div id="rstage">
+    <p>Release Stage:
+      <select>
+        <option value="production">production</option>
+        <option value="development">development</option>
+        <option value="staging">staging</option>
+        <option value="monkeys">monkeys</option>
+      </select>
+      </p>
+    </div>
+
+    <div id="javascript">
+        <p>JAVASCRIPT ERRORS</p>
+          <button type="button" id="jsIndexError">IndexError</button>
+          <button type="button" id="jsRefError">ReferenceError</button>
+          <button type="button" id="jsTypeError">TypeError</button>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="app.js"></script>
+
     <script>
       // Syntax errors like this trigger a `window.onerror` event which get caught
       // by the Bugsnag notifier, provided the notifier was loaded first

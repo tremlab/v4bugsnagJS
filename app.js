@@ -1,14 +1,28 @@
 "use strict"
 
-
 // Setting global metaData on the client object. Each error report will
 // merge this object with any other metaData it receives via other means
 bugsnagClient.metaData = {
   company: {
-    name: "Acme Co.",
-    country: "uk"
+    name: "Themyscira",
+    transport: "invisible jet"
   }
 }
+
+document.addEventListener ("DOMContentLoaded", function() 
+    {
+        // JS error event listeners
+        $('#jsRangeError').on('click', fJsRange);
+        $('#jsRefError').on('click', fJsRef);
+        $('#jsTypeError').on('click', fJsType);
+
+
+    } // closes anon function
+); // closes DOM event listener
+console.log("connected!!!!!!!");
+
+
+
 
 function notifyException() {
   try {
@@ -31,13 +45,7 @@ bugsnagClient.notify({
   // severity: "info"
 });
 
-// bugsnagClient.notify(new Error('Pants on fire!!!!!'), {
-//   beforeSend: (report) => {
-//     // report.severity: "info",
-//     report.message: "Koala!!!"
-//     })
-//   }
-// })
+
 
 bugsnagClient.notify(new Error('Koala!'), {
   beforeSend: (report) => {
@@ -48,30 +56,88 @@ bugsnagClient.notify(new Error('Koala!'), {
   }
 })
 
-var tracks = [
-  { name: 'Quicksand', length: '2:13' },
-  { name: 'A Kiss to Send Us Off', length: '4:16' },
-  { name: 'Dig', length: '4:17' },
-  { name: 'Anna Molly', length: '3:46' },
-  { name: 'Love Hurts', length: '3:57' },
-  { name: 'Light Grenades', length: '2:20' },
-  { name: 'Earth to Bella (Part I)', length: '2:28' },
-  { name: 'Oil and Water', length: '3:50' },
-  { name: 'Diamonds and Coal', length: '3:47' },
-  { name: 'Rogues', length: '3:56' },
-  { name: 'Paper Shoes', length: '4:17' },
-  { name: 'Pendulous Threads', length: '5:35' },
-  { name: 'Earth to Bella (Part II)', length: '2:56' }
-]
+// captures the data user has selected on the page,
+// to hand over to AJAX calls
+function fGetUserData() {
+    var user = $('#username').val();
+    var rstage = $('#rstage option:selected').val();
+    var handling = $('#handling input:checked').val();
+    // if user field is blank:
+    if (user.trim() === "") {
+        user = "Voltron, Defender of the Universe"
+    }
 
-var longest = 0
-for (var i = 0, secs; i <= tracks.length; i++) {
-  secs = toSecs(tracks[i].length)
-  if (secs > longest) longest = secs
-}
-alert(longest)
+    var user_info = {
+        "user": user,
+        "rstage": rstage,
+        "handling": handling
+    };
 
-function toSecs(str) {
-  var parts = str.split(':')
-  return parts[0] * 60 + parts[1]
+    console.log(user_info);
+    return user_info;
 }
+
+
+// *************************************
+// FUNCTIONS TO TRIGGER JAVASCRIPT ERRORS
+// *************************************
+
+// handles the button for JavaScript Index error.
+function fJsRange(evt) {
+    var user_info = fGetUserData();
+    var num = 1;
+
+    if (user_info["handling"] === "yes") {
+        try {
+            num.toPrecision(500);
+        } 
+        catch (e) {
+            Bugsnag.notifyException(e, "a handled Range Error - ta da!!");            
+        }
+    }
+
+    else {
+        // deliberate Range Error
+        num.toPrecision(500);
+    }
+}
+
+// handles the button for JavaScript Name error.
+function fJsRef(evt) {
+    var user_info = fGetUserData();
+    if (user_info["handling"] === "yes") {
+        try {
+            console.log(doesntExist);
+        } 
+        catch (e) {
+            Bugsnag.notifyException(e, "a handled Reference Error - HUZZAH!");            
+        }
+        // action...?
+    }
+
+    else {
+        // deliberate Reference Error
+        console.log(doesntExist);
+    }
+}
+
+// handles the button for JavaScript Type error.
+function fJsType(evt) {
+    var user_info = fGetUserData();
+    if (user_info["handling"] === "yes") {
+    var num = 1;
+        try {
+            num.toUpperCase(); 
+        }
+        catch (e) {
+            Bugsnag.notifyException(e, "a handled Type Error - BOOYAH!");            
+        }
+            // action...?
+    }
+    else {
+        // deliberate Type Error
+        num.toUpperCase(); 
+    }
+}
+
+
