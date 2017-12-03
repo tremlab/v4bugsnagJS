@@ -130,7 +130,7 @@ function fJsRef(evt) {
             console.log(doesntExist);
         } 
         catch (e) {
-            Bugsnag.notifyException(e, "a handled Reference Error - HUZZAH!");            
+            bugsnagClient.notify(e, "a handled Reference Error - HUZZAH!");            
         }
         // action...?
     }
@@ -152,7 +152,7 @@ function fJsType(evt) {
             num.toUpperCase(); 
         }
         catch (e) {
-            Bugsnag.notifyException(e, "a handled Type Error - BOOYAH!");            
+            bugsnagClient.notify(e, "a handled Type Error - BOOYAH!");            
         }
             // action...?
     }
