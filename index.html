@@ -9,18 +9,9 @@
     <!-- below initializes the bugsnag client.  Only API key is required. -->
     <!-- Get your own api key to see what the error reports look like!
           www.bugsnag.com   -->
-    
-    <script>window.bugsnagClient = bugsnag({
+   
+    <!-- HAVING DIFFUCLTY INITIALIZING BUGNSAG BOTH IN HTML & JS -->
 
-        apiKey: '8b1f5fc2a44d5f6cdbaff524d74c33b1',
-        appVersion: '1.2.7',
-        releaseStage: 'staging',
-        notifyReleaseStages: [ 'staging', 'production' ],
-        // metaData: { /* some metaData to attach to every report */ },
-        user: { id: '007', name: 'Diana Prince', email: 'ww@amazons.com' },
-        // beforeSend: function (report) { /* amend or ignore the report */ }
-    })
-    </script>
 
   </head>
 
@@ -64,7 +55,7 @@
 
     <div id="javascript">
         <p>JAVASCRIPT ERRORS</p>
-          <button type="button" id="jsIndexError">IndexError</button>
+          <button type="button" id="jsIndexError">RangeError</button>
           <button type="button" id="jsRefError">ReferenceError</button>
           <button type="button" id="jsTypeError">TypeError</button>
     </div>

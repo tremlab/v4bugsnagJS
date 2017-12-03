@@ -13,33 +13,50 @@ document.addEventListener ("DOMContentLoaded", function()
 ); 
 console.log("snag(bug);");
 
+
+
 // Setting global metaData on the client object. Each error report will
 // merge this object with any other metaData it receives via other means
-bugsnagClient.metaData = {
-  company: {
-    name: "Themyscira",
-    transport: "invisible jet"
-  }
-}
+// bugsnagClient.metaData = {
+//   company: {
+//     name: "Themyscira",
+//     transport: "invisible jet"
+//   }
+// }
 
 // beforeSend is a powerfool tool.  It will fire before EVERY error is sent, 
 // whether handled or unhandled.  Here you can remove private data, 
 // add custom datapoints, and even stop the report entirely.
-bugsnagClient.beforeSend = function (report) {
-  var user_info = fGetUserData();
-  var rstage = user_info["rstage"];
 
-  if (rstage === "staging") {
-    // to stop all staging errors from being reported, you have 2 options:
-      report.ignore();
-      // ignore is a new method that will stop the report, 
-      // or you can just return false from the beforeSend.
-      }
-    // read the docs for all the many attributes you can modify here.
-  report.app.releaseStage = rstage;
-  report.user.name = user_info["user"];
+var bugsnagClient = bugsnag({
+  apiKey: '8b1f5fc2a44d5f6cdbaff524d74c33b1',
+  beforeSend: function (report) {
+        console.log("unicorns!");
+        var user_info = fGetUserData();
+        var rstage = user_info["rstage"];
 
-}
+        if (rstage === "staging") {
+          // to stop all staging errors from being reported, you have 2 options:
+            report.ignore();
+            // ignore is a new method that will stop the report, 
+            // or you can just return false from the beforeSend.
+            }
+          // read the docs for all the many attributes you can modify here.
+        report.app.releaseStage = rstage;
+        report.user["name"] = user_info["user"];
+      },
+  appVersion: '1.2.3',
+  releaseStage: 'staging',
+  notifyReleaseStages: [ 'staging', 'production' ],
+  user: { id: '007', name: 'Diana Prince', email: 'ww@amazons.com' },
+})
+
+bugsnagClient.metaData = {
+  company: {
+      name: "Themyscira",
+      transport: "invisible jet"
+    }
+  }
 
 
 function notifyException() {
@@ -127,8 +144,10 @@ function fJsRef(evt) {
 // handles the button for JavaScript Type error.
 function fJsType(evt) {
     var user_info = fGetUserData();
-    if (user_info["handling"] === "yes") {
     var num = 1;
+
+    if (user_info["handling"] === "yes") {
+
         try {
             num.toUpperCase(); 
         }
