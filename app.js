@@ -103,6 +103,12 @@ bugsnagClient.notify({
 // *************************************
 
 // handles the button for JavaScript Index error.
+//**********************************************************
+
+
+
+
+// pick a better error!  not reporting >:D 
 function fJsRange(evt) {
     var user_info = fGetUserData();
     var num = 1;
