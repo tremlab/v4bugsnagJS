@@ -11,27 +11,19 @@ document.addEventListener ("DOMContentLoaded", function()
 
     } 
 ); 
-console.log("snag(bug);");
 
-
-
-// Setting global metaData on the client object. Each error report will
-// merge this object with any other metaData it receives via other means
-// bugsnagClient.metaData = {
-//   company: {
-//     name: "Themyscira",
-//     transport: "invisible jet"
-//   }
-// }
+console.log("app.js loaded;");
 
 // beforeSend is a powerfool tool.  It will fire before EVERY error is sent, 
 // whether handled or unhandled.  Here you can remove private data, 
 // add custom datapoints, and even stop the report entirely.
 
-var bugsnagClient = bugsnag({
-  apiKey: '8b1f5fc2a44d5f6cdbaff524d74c33b1',
-  beforeSend: function (report) {
-        console.log("unicorns!");
+// if you are used to v3, this is VERY different syntax.  beforeSend is an ARRAY,
+// so you can have mutlpipl beforeSend's, N.B. syntax is simpler if you define 
+// beforeSend where you initialize your bugsnagClient, but that did not work for 
+// this example.
+bugsnagClient.config.beforeSend.push(function (report) {
+        console.log("snag(bug);");
         var user_info = fGetUserData();
         var rstage = user_info["rstage"];
 
@@ -44,19 +36,25 @@ var bugsnagClient = bugsnag({
           // read the docs for all the many attributes you can modify here.
         report.app.releaseStage = rstage;
         report.user["name"] = user_info["user"];
-      },
-  appVersion: '1.2.3',
-  releaseStage: 'staging',
-  notifyReleaseStages: [ 'staging', 'production' ],
-  user: { id: '007', name: 'Diana Prince', email: 'ww@amazons.com' },
-})
+      });
 
+
+// metadata allows you to add any custom info that is relevant to your app.
+// very usefgul for trackign A/B testing.  
+//  You could also define metadata insdid the beforeSend (if for example, 
+// the data changes throughout the user's interaction with your app.)
 bugsnagClient.metaData = {
   company: {
       name: "Themyscira",
       transport: "invisible jet"
     }
   }
+
+//   appVersion: '1.2.3',
+//   releaseStage: 'staging',
+//   notifyReleaseStages: [ 'staging', 'production' ],
+//   user: { id: '007', name: 'Diana Prince', email: 'ww@amazons.com' },
+// })
 
 
 function notifyException() {
@@ -76,13 +74,11 @@ function notifyException() {
 // below syntax is like a 'log' to bugsnag.  
 // It does not even require an error object, just a string name & message.
 // Additional data is optional.
-
-
 bugsnagClient.notify({
-  name: "ErrorName", 
-  message: "Monkey pants!!!!!!1!!!!", 
-  // beforeSend: function (report) {severity: "info";}
-  // severity: "info"
+  name: "SeverityTest", 
+  message: "Monkey pants!!!!!!1!!!!" 
+},
+  {severity: "info"
 });
 
 
