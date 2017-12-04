@@ -82,6 +82,7 @@ bugsnagClient.notify({
   name: "ErrorName", 
   message: "Monkey pants!!!!!!1!!!!", 
   // beforeSend: function (report) {severity: "info";}
+}, {
   // severity: "info"
 });
 
