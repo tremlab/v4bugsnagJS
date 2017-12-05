@@ -75,6 +75,7 @@ function notifyException() {
 // It does not even require an error object, just a string name & message.
 // Additional data is optional.
 bugsnagClient.notify({
+
   name: "SeverityTest", 
   message: "Monkey pants!!!!!!1!!!!" 
 },
