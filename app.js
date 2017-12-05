@@ -41,7 +41,7 @@ bugsnagClient.config.beforeSend.push(function (report) {
 
 // metadata allows you to add any custom info that is relevant to your app.
 // very usefgul for trackign A/B testing.  
-//  You could also define metadata insdid the beforeSend (if for example, 
+//  You could also define metadata inside the beforeSend (if for example, 
 // the data changes throughout the user's interaction with your app.)
 bugsnagClient.metaData = {
   company: {
@@ -49,22 +49,6 @@ bugsnagClient.metaData = {
       transport: "invisible jet"
     }
   }
-
-
-
-function notifyException() {
-  try {
-    JSON.parse('definitely not json')
-  } catch (e) {
-    // The above string won't parse as JSON but the caught error
-    // won't automatically go to Bugsnag. `notifyException(err)`
-    // provides a way to manually notify Bugasnag of errors you
-    // caught but want to track
-    bugsnagClient.notify(e)
-  }
-}
-
-// notifyException();
 
 // below syntax is like a 'log' to bugsnag.  
 // It does not even require an error object, just a string name & message.
@@ -94,12 +78,6 @@ bugsnagClient.notify({
 // *************************************
 
 // handles the button for JavaScript Index error.
-//**********************************************************
-
-
-
-
-// pick a better error!  not reporting >:D 
 function fJsRange(evt) {
     var user_info = fGetUserData();
     var num = 1;
@@ -116,9 +94,11 @@ function fJsRange(evt) {
     }
 
     else {
+        console.log("range");
         // deliberate Range Error
         num.toPrecision(500);
     }
+
 }
 
 // handles the button for JavaScript Name error.
@@ -164,7 +144,7 @@ function fJsType(evt) {
 }
 
 
-// captures the data user has selected on the page,
+// captures the data user has been selected on the page,
 // to hand over to AJAX calls. A "mock" of user/session 
 // info you can add to any error.
 
@@ -186,4 +166,21 @@ function fGetUserData() {
     console.log(user_info);
     return user_info;
 }
+
+
+
+
+// function notifyException() {
+//   try {
+//     JSON.parse('definitely not json')
+//   } catch (e) {
+//     // The above string won't parse as JSON but the caught error
+//     // won't automatically go to Bugsnag. `notifyException(err)`
+//     // provides a way to manually notify Bugasnag of errors you
+//     // caught but want to track
+//     bugsnagClient.notify(e)
+//   }
+// }
+
+// // notifyException();
 
