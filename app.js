@@ -1,6 +1,6 @@
 "use strict"
 
-
+// event listeners below - not related to bugsnag notifer.
 document.addEventListener ("DOMContentLoaded", function() 
     {
         // JS error event listeners
@@ -14,7 +14,17 @@ document.addEventListener ("DOMContentLoaded", function()
 
 console.log("app.js loaded;");
 
-// beforeSend is a powerfool tool.  It will fire before EVERY error is sent, 
+// ********************************************
+// BUGSNAG v4 JAVASCRIPT NOTIFIER - CONFIGURATION
+// ********************************************
+
+// N.B. In this example, the bugsnagClient has already been initialized in th HTML.
+// The code below cahnges and adds to the client. Please see docs for the various
+// ways to install, initialize and configure bugsnag in your app. https://docs.bugsnag.com/platforms/browsers/js/
+
+
+
+// beforeSend is a powerfool tool.  It will fire right before EVERY error is sent, 
 // whether handled or unhandled.  Here you can remove private data, 
 // add custom datapoints, and even stop the report entirely.
 
@@ -26,22 +36,16 @@ bugsnagClient.config.beforeSend.push(function (report) {
         console.log("snag(bug);");
         var user_info = fGetUserData();
         var rstage = user_info["rstage"];
-
-        if (rstage === "staging") {
-          // to stop all staging errors from being reported, you have 2 options:
-            report.ignore();
-            // ignore is a new method that will stop the report, 
-            // or you can just return false from the beforeSend.
-            }
-          // read the docs for all the many attributes you can modify here.
         report.app.releaseStage = rstage;
         report.user["name"] = user_info["user"];
-      });
+      }
+    );
 
 
-// metadata allows you to add any custom info that is relevant to your app.
+// Metadata allows you to add any custom info that is relevant to your app.
 // very usefgul for trackign A/B testing.  
-//  You could also define metadata inside the beforeSend (if for example, 
+// This code will attache to ALL error reports within this app, but
+// you could also define metadata inside the beforeSend (if for example, 
 // the data changes throughout the user's interaction with your app.)
 bugsnagClient.metaData = {
   company: {
@@ -53,6 +57,7 @@ bugsnagClient.metaData = {
 // below syntax is like a 'log' to bugsnag.  
 // It does not even require an error object, just a string name & message.
 // Additional data is optional.
+//This code automatically send an error report every time the page is loaded
 bugsnagClient.notify({
   name: "SeverityTest", 
   message: "Monkey pants!!!!!!1!!!!" 
@@ -61,21 +66,11 @@ bugsnagClient.notify({
 });
 
 
-
-// bugsnagClient.notify(new Error('Koala!'), {
-//   beforeSend: (report) => {    
-//     report.updateMetaData('pants', {
-//       request_id: 12345,
-//       message_id: 854
-//     })
-//   }
-// })
-
-
-
 // *************************************
 // FUNCTIONS TO TRIGGER JAVASCRIPT ERRORS
 // *************************************
+// each of these funcitons shows what happens when the error is handled or 
+// unhandled. 
 
 // handles the button for JavaScript Index error.
 function fJsRange(evt) {
@@ -94,7 +89,6 @@ function fJsRange(evt) {
     }
 
     else {
-        console.log("range");
         // deliberate Range Error
         num.toPrecision(500);
     }
@@ -170,17 +164,4 @@ function fGetUserData() {
 
 
 
-// function notifyException() {
-//   try {
-//     JSON.parse('definitely not json')
-//   } catch (e) {
-//     // The above string won't parse as JSON but the caught error
-//     // won't automatically go to Bugsnag. `notifyException(err)`
-//     // provides a way to manually notify Bugasnag of errors you
-//     // caught but want to track
-//     bugsnagClient.notify(e)
-//   }
-// }
-
-// // notifyException();
 
