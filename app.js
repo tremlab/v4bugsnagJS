@@ -19,7 +19,7 @@ console.log("app.js loaded;");
 // add custom datapoints, and even stop the report entirely.
 
 // if you are used to v3, this is VERY different syntax.  beforeSend is an ARRAY,
-// so you can have mutlpipl beforeSend's, N.B. syntax is simpler if you define 
+// so you can have mutliple beforeSend's. N.B. syntax is simpler if you define 
 // beforeSend where you initialize your bugsnagClient, but that did not work for 
 // this example.
 bugsnagClient.config.beforeSend.push(function (report) {
@@ -50,11 +50,6 @@ bugsnagClient.metaData = {
     }
   }
 
-//   appVersion: '1.2.3',
-//   releaseStage: 'staging',
-//   notifyReleaseStages: [ 'staging', 'production' ],
-//   user: { id: '007', name: 'Diana Prince', email: 'ww@amazons.com' },
-// })
 
 
 function notifyException() {
@@ -75,7 +70,6 @@ function notifyException() {
 // It does not even require an error object, just a string name & message.
 // Additional data is optional.
 bugsnagClient.notify({
-
   name: "SeverityTest", 
   message: "Monkey pants!!!!!!1!!!!" 
 },
@@ -115,7 +109,9 @@ function fJsRange(evt) {
             num.toPrecision(500);
         } 
         catch (e) {
-            bugsnagClient.notify(e, "a handled Range Error - ta da!!");            
+            bugsnagClient.notify(e, {
+                context: "a handled Range Error - ta da!!"
+            });            
         }
     }
 
@@ -133,9 +129,10 @@ function fJsRef(evt) {
             console.log(doesntExist);
         } 
         catch (e) {
-            bugsnagClient.notify(e, "a handled Reference Error - HUZZAH!");            
+            bugsnagClient.notify(e, { 
+               context: "a handled Reference Error - HUZZAH!"
+            });            
         }
-        // action...?
     }
 
     else {
@@ -155,9 +152,10 @@ function fJsType(evt) {
             num.toUpperCase(); 
         }
         catch (e) {
-            bugsnagClient.notify(e, "a handled Type Error - BOOYAH!");            
+            bugsnagClient.notify(e, { 
+               context: "a handled Tyoe Error - BOOYAH!"
+            });            
         }
-            // action...?
     }
     else {
         // deliberate Type Error

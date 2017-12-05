@@ -9,10 +9,15 @@
     <!-- below initializes the bugsnag client.  Only API key is required. -->
     <!-- Get your own api key to see what the error reports look like!
           www.bugsnag.com   -->
-    <script>window.bugsnagClient = bugsnag('8b1f5fc2a44d5f6cdbaff524d74c33b1')</script>
-
-    <!-- HAVING DIFFUCLTY INITIALIZING BUGNSAG BOTH IN HTML & JS -->
-
+    <script>window.bugsnagClient = bugsnag({
+      apiKey: '8b1f5fc2a44d5f6cdbaff524d74c33b1',
+      // version is important for source maps, and keeping trap of progress on each version.
+       appVersion: '1.2.3',
+       releaseStage: 'staging',
+       notifyReleaseStages: [ 'staging', 'production' ],
+      user: { id: '007', name: 'Diana Prince', email: 'ww@amazons.com'} 
+      })
+    </script>
   </head>
 
   <body>
@@ -32,7 +37,7 @@
     <input type="text" name="user" id="username"><br>
 
     <!-- Both handled and unhandled errors can be reported to Bugsnag, 
-          but they are configured differently and can easily be filteres in the dashboard. -->
+          but they are configured differently and can easily be filtered in the dashboard. -->
     Can you handle it?
   <div id="handling">
     <input type="radio" name="handling" value="no" checked>No
@@ -73,3 +78,6 @@
     </script>
   </body>
 </html>
+
+
+
