@@ -1,6 +1,6 @@
 "use strict"
 
-// event listeners below - not related to bugsnag notifer.
+// event listeners below.
 document.addEventListener ("DOMContentLoaded", function() 
     {
         // JS error event listeners
@@ -18,8 +18,8 @@ console.log("app.js loaded;");
 // BUGSNAG v4 JAVASCRIPT NOTIFIER - CONFIGURATION
 // ********************************************
 
-// N.B. In this example, the bugsnagClient has already been initialized in th HTML.
-// The code below cahnges and adds to the client. Please see docs for the various
+// N.B. In this example, the bugsnagClient has already been initialized in the HTML.
+// The code below changes and adds to the client. Please see docs for the various
 // ways to install, initialize and configure bugsnag in your app. https://docs.bugsnag.com/platforms/browsers/js/
 
 
@@ -38,6 +38,7 @@ bugsnagClient.config.beforeSend.push(function (report) {
         var rstage = user_info["rstage"];
         report.app.releaseStage = rstage;
         report.user["name"] = user_info["user"];
+        report.severity = user_info["severity"];
       }
     );
 
@@ -55,14 +56,14 @@ bugsnagClient.metaData = {
   }
 
 // below syntax is like a 'log' to bugsnag.  
-// It does not even require an error object, just a string name & message.
-// Additional data is optional.
-//This code automatically send an error report every time the page is loaded
+// It does not even require an error object, just a string.
+//This code automatically sends an error report every time the page is loaded
+bugsnagClient.notify("Maximum effort!!!1!!!");
+
+// a more detailed version, again no error object needed for this syntax.
 bugsnagClient.notify({
-  name: "SeverityTest", 
-  message: "Monkey pants!!!!!!1!!!!" 
-},
-  {severity: "info"
+    name: "My Llamma",
+    message: "don't like you.",
 });
 
 
@@ -146,6 +147,7 @@ function fGetUserData() {
     var user = $('#username').val();
     var rstage = $('#rstage option:selected').val();
     var handling = $('#handling input:checked').val();
+    var severity = $('#severity option:selected').val();
     // if user field is blank:
     if (user.trim() === "") {
         user = "Voltron, Defender of the Universe"
@@ -154,7 +156,8 @@ function fGetUserData() {
     var user_info = {
         "user": user,
         "rstage": rstage,
-        "handling": handling
+        "handling": handling,
+        "severity": severity
     };
 
     console.log(user_info);
